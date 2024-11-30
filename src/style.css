@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+.legend {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  max-height: 300px;
+  width: 250px;
+  overflow-y: auto;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  font-size: 12px;
+  font-family: Arial, sans-serif;
+}
+
+.legend-item {
+  margin-bottom: 10px;
+}
+
+.legend-item strong {
+  font-size: 14px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+.label {
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  text-align: center;
+  pointer-events: none;
+  white-space: pre-line;
+}

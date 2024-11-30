@@ -1,0 +1,36 @@
+{
+  "name": "thesis-main-code",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/csv-parse": "^1.2.2",
+    "@types/dat.gui": "^0.7.13",
+    "@types/papaparse": "^5.3.14",
+    "@types/proj4": "^2.5.5",
+    "@types/three": "^0.165.0",
+    "dat.gui": "^0.7.9",
+    "json-loader": "^0.5.7",
+    "three": "^0.165.0",
+    "ts-loader": "^9.5.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2",
+    "vite": "^5.3.1",
+    "webpack": "^5.93.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4"
+  },
+  "dependencies": {
+    "@types/xml2js": "^0.4.14",
+    "chart.js": "^4.4.6",
+    "csv-parse": "^5.5.6",
+    "papaparse": "^5.4.1",
+    "proj4": "^2.12.1",
+    "xml2js": "^0.6.2"
+  }
+}
