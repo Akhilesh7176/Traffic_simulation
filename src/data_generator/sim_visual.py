@@ -210,7 +210,7 @@ def data_sim(data_ideal, follower):
 
 
 if __name__ == '__main__':
-    path = '/Volumes/AKHIL7176/TU DRESDEN PC/THESIS/Thesis_main_code/public'
+    path = '/Volumes/AKHIL7176/TU_DRESDEN_PC/THESIS/Thesis_main_refactored/public'
     data = pd.read_csv(fr'{path}/AllD_T1_lanes_2.csv')
     data_lf = pd.read_csv(fr'{path}/LF_data.csv')
     data_lf = data_lf.rename(columns={
