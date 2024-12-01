@@ -538,4 +538,44 @@ function animate() {
 
 // Start the animation loop
 lastTime = Date.now();
+
+// Create the "Get Vehicles" button
+const getVehiclesButton = document.createElement("button");
+getVehiclesButton.textContent = "Get Vehicles";
+getVehiclesButton.style.position = "absolute";
+getVehiclesButton.style.top = "425px"; // Adjust the position as needed
+getVehiclesButton.style.left = "87.5%";
+getVehiclesButton.style.padding = "10px 20px";
+getVehiclesButton.style.fontSize = "16px";
+getVehiclesButton.style.backgroundColor = "#ffffff";
+getVehiclesButton.style.border = "1px solid #ccc";
+getVehiclesButton.style.borderRadius = "5px";
+getVehiclesButton.style.cursor = "pointer";
+getVehiclesButton.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.3)";
+
+// getVehiclesButton.addEventListener("click", () => {
+//   alert("Fetching vehicle data...");
+// });
+
+getVehiclesButton.addEventListener("click", async () => {
+  const apiUrl = "http://127.0.0.1:8000/api/vehicle/";
+
+  try {
+    // Fetch data from the API
+    const response = await fetch(apiUrl);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+
+    // Log the data to the console
+    console.log("Vehicle Data:", data);
+  } catch (error) {
+    // Handle any errors
+    console.error("Error fetching vehicle data:", error);
+  }
+});
+
+// Add the button to the document body
+document.body.appendChild(getVehiclesButton);
 animate();
