@@ -56,7 +56,6 @@ class IDM:
 
         self.speed_limit = 1000
         self.bmax = 9
-        print('chun')
 
     # free acceleration equation
     '''
@@ -112,7 +111,10 @@ class IDM:
 def sim(v0, T, s0, a, b, data):
     count = 0
     GAP_MIN = 0.4
-    data = data.reset_index()
+    data = data.sort_values(by='Time [s]')
+    data = data.reset_index(drop=True)
+    data['vx[m/s]'] = data['vx[m/s]']*5/18
+    data['lead_vx'] = data['lead_vx']*5/18
     dt = 0.033367
     CF = IDM(v0, T, s0, a, b)
 
@@ -134,6 +136,7 @@ def sim(v0, T, s0, a, b, data):
     v1[0] = data.loc[0, 'vx[m/s]']
     gap1[0] = gapData[0]  # max(GAP_MIN,data.loc[0,'gap[m]'])
     acc1[0] = CF.calcAccLong(gap1[0], v1[0], data.loc[0, 'lead_vx'])
+    x1[0] = data.loc[0, 'Follower x_rotated']
 
     # simulation
 
@@ -167,7 +170,8 @@ def sim(v0, T, s0, a, b, data):
             gap1[i] = gapData[i]  # data.loc[i,'gap[m]']
 
         # x1=gapData[i]-gap1[i]-data.loc[i,'Follower x_rotated']
-        x1 = data.loc[i, 'Follower x_rotated']
+        x1[i] = data.loc[i, 'Follower x_rotated']+gapData[i]-gap1[i]
+        # x1 = data.loc[i, 'Follower x_rotated']
 
         acc1[i] = CF.calcAccLong(gap1[i], v1[i], data.loc[i, 'lead_vx'])
 
@@ -200,6 +204,7 @@ def sim(v0, T, s0, a, b, data):
 
     follower_data = follower_data[[
         'vehicle_id', 'Time [s]', 'x[m]', 'y[m]', 'Speed [km/h]', 'flw_type']]
+    follower_data['Speed [km/h]'] = follower_data['Speed [km/h]']*18/5
     # Replace 'Motorcycle' with 'Medium Vehicle' in follower data
 
     return [sse, avg_error, data, follower_data]
@@ -230,7 +235,10 @@ if __name__ == '__main__':
     a = args.a
     b = args.b
 
-    f_data = sim(v0, T, s0, a, b, data_fol)[3]
+    pred = sim(v0, T, s0, a, b, data_fol)
+    f_data = pred[3]
+    f_error = pred[1]
+    print("f_error is", f_error)
 
     out_data = pd.concat((l_data, f_data))
     out_data1 = out_data.sort_values(
