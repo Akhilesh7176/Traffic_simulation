@@ -15,7 +15,7 @@ export interface VehicleData {
   speed?: number;
   tooltipAlwaysOn?: boolean;
   labelElement?: HTMLDivElement;
-  labelObject?: any; // Use CSS2DObject if available
+  labelObject?: any;
   legendItem?: HTMLDivElement;
   toggleButton?: HTMLButtonElement;
   infoText?: HTMLSpanElement;
@@ -76,18 +76,14 @@ export function animateVehicle(
   const vehicle = vehicleData.vehicle;
   const vehicleMovementData = vehicleData.vehicleMovementData;
 
-  // Handle cases where the vehicle hasn't started moving or has finished moving
   if (elapsedTime < vehicleMovementData[0][4]) {
-    // Vehicle hasn't started moving yet
     return;
   } else if (
     elapsedTime > vehicleMovementData[vehicleMovementData.length - 1][4]
   ) {
-    // Vehicle has finished moving
     return;
   }
 
-  // Find the current segment based on elapsedTime
   let currentIndex = 0;
   for (let i = 0; i < vehicleMovementData.length - 1; i++) {
     if (
@@ -135,14 +131,11 @@ export function animateVehicle(
   vehicle.up.set(0, 1, 0);
   vehicle.rotateY(1.5 * Math.PI);
 
-  // Store current position and time in vehicleData
   vehicleData.currentPosition = vehicle.position.clone();
   vehicleData.currentTime = elapsedTime;
 
-  // Update the speed from vehicleMovementData (index 6)
   vehicleData.speed = vehicleMovementData[currentIndex][6];
 
-  // Store current latitude and longitude
   vehicleData.currentLat = THREE.MathUtils.lerp(lat1, lat2, currentProgress);
   vehicleData.currentLon = THREE.MathUtils.lerp(lon1, lon2, currentProgress);
 }

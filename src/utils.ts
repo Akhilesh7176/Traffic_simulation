@@ -1,4 +1,3 @@
-// Utility functions
 export function latLonToWebMercator(lat: number, lon: number) {
   const R = 6378137;
   const x = R * Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 180 / 2));
@@ -17,7 +16,6 @@ export function getUniqueItemsById(data: any[], idIndex: number) {
   return Array.from(uniqueItemsMap.values());
 }
 
-// Button creation functions
 export function createPauseButton(
   isPaused: boolean,
   onPauseClick: () => void
@@ -25,20 +23,31 @@ export function createPauseButton(
   const pauseButton = document.createElement("button");
   pauseButton.textContent = isPaused ? "Resume" : "Pause";
   pauseButton.style.position = "absolute";
-  pauseButton.style.top = "10px";
-  pauseButton.style.left = "10px";
+  pauseButton.style.top = "20px";
+  pauseButton.style.right = "30px";
+
   pauseButton.style.padding = "10px 20px";
   pauseButton.style.fontSize = "16px";
-  pauseButton.style.backgroundColor = "#ffffff";
-  pauseButton.style.border = "1px solid #ccc";
-  pauseButton.style.borderRadius = "5px";
+  pauseButton.style.fontWeight = "bold";
+  pauseButton.style.color = "#ffffff";
+  pauseButton.style.background = "linear-gradient(to bottom, #444444, #333333)";
+  pauseButton.style.border = "none";
+  pauseButton.style.borderRadius = "20px";
   pauseButton.style.cursor = "pointer";
-  pauseButton.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.3)";
+  pauseButton.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.5)";
 
+  pauseButton.addEventListener("mouseenter", () => {
+    pauseButton.style.background =
+      "linear-gradient(to bottom, #555555, #444444)";
+  });
+  pauseButton.addEventListener("mouseleave", () => {
+    pauseButton.style.background =
+      "linear-gradient(to bottom, #444444, #333333)";
+  });
   pauseButton.style.transform = "translate3d(0px, 0px, 0)";
+
   document.body.appendChild(pauseButton);
 
-  // Variables for dragging state
   let isDragging = false;
   let startX = 0;
   let startY = 0;
@@ -80,20 +89,30 @@ export function createImageButton(onImageClick: () => void): HTMLButtonElement {
   const imageButton = document.createElement("button");
   imageButton.textContent = "Image";
   imageButton.style.position = "absolute";
-  imageButton.style.top = "10px";
-  imageButton.style.left = "80px"; // Adjust the position as needed
+  imageButton.style.top = "20px";
+  imageButton.style.right = "200px";
+
   imageButton.style.padding = "10px 20px";
   imageButton.style.fontSize = "16px";
-  imageButton.style.backgroundColor = "#ffffff";
-  imageButton.style.border = "1px solid #ccc";
-  imageButton.style.borderRadius = "5px";
+  imageButton.style.fontWeight = "bold";
+  imageButton.style.color = "#ffffff";
+  imageButton.style.background = "linear-gradient(to bottom, #444444, #333333)";
+  imageButton.style.border = "none";
+  imageButton.style.borderRadius = "20px";
   imageButton.style.cursor = "pointer";
-  imageButton.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.3)";
+  imageButton.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.5)";
 
+  imageButton.addEventListener("mouseenter", () => {
+    imageButton.style.background =
+      "linear-gradient(to bottom, #555555, #444444)";
+  });
+  imageButton.addEventListener("mouseleave", () => {
+    imageButton.style.background =
+      "linear-gradient(to bottom, #444444, #333333)";
+  });
   imageButton.style.transform = "translate3d(0px, 0px, 0)";
   document.body.appendChild(imageButton);
 
-  // Variables for dragging state
   let isDragging = false;
   let startX = 0;
   let startY = 0;
