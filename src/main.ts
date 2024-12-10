@@ -206,7 +206,7 @@ function updateLegend() {
             vehicleData.labelElement = labelDiv;
 
             const labelObject = new CSS2DObject(labelDiv);
-            labelObject.position.set(0, 1, 0);
+            labelObject.position.set(0, 6, 0);
             vehicleData.labelObject = labelObject;
             vehicleData.vehicle.add(labelObject);
           }

@@ -48,7 +48,7 @@ export function createVehicle(
       break;
     case "Medium Vehicle":
       vehicle = createSuv(scene, 0.055);
-      tooltipText = `SUV ${id}`;
+      tooltipText = `Suv ${id}`;
       break;
     default:
       console.warn(`Unknown vehicle type: ${type}, defaulting to Car.`);
