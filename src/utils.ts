@@ -149,3 +149,28 @@ export function createImageButton(onImageClick: () => void): HTMLButtonElement {
 
   return imageButton;
 }
+
+export const showFError = (f_error: string) => {
+  const ShowFError: HTMLTextAreaElement = document.createElement("textarea");
+  ShowFError.textContent = f_error;
+  ShowFError.style.position = "fixed";
+  ShowFError.style.bottom = "70px";
+  ShowFError.style.left = "60px";
+  ShowFError.style.alignContent = "center";
+  ShowFError.style.width = "160px";
+  ShowFError.style.height = "30px";
+  ShowFError.style.padding = "10px";
+  ShowFError.style.fontSize = "16px";
+  ShowFError.style.fontWeight = "bold";
+  ShowFError.style.color = "#ffffff";
+  ShowFError.style.background = "linear-gradient(to bottom, #444444, #333333)";
+  ShowFError.style.border = "none";
+  ShowFError.style.borderRadius = "10px";
+  ShowFError.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.5)";
+  ShowFError.style.resize = "none";
+  ShowFError.style.overflow = "hidden";
+  ShowFError.style.zIndex = "1000";
+  ShowFError.readOnly = true;
+
+  return ShowFError;
+};

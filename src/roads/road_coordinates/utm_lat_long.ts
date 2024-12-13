@@ -15,6 +15,7 @@ export let changed_utm_coords: [
   number,
   number,
   string,
+  number,
   number
 ][] = [];
 
@@ -45,6 +46,7 @@ export async function main() {
     const time: number[] = [];
     const flw_type: string[] = [];
     const speed: number[] = [];
+    const f_error: number[] = [];
 
     // Extract data from the parsed results
     results.data.forEach((row) => {
@@ -55,8 +57,10 @@ export async function main() {
       time.push(parseFloat(row["Time [s]"]));
       flw_type.push(row["flw_type"]);
       speed.push(parseFloat(row["Speed [km/h]"]));
+      f_error.push(parseFloat(row["f_error"]));
     });
 
+    console.log("Check f error - ", f_error[0]);
     const utm_coords_raw: [
       number,
       number,
@@ -64,6 +68,7 @@ export async function main() {
       number,
       number,
       string,
+      number,
       number
     ][] = x.map((val, index) => [
       val, // x coordinate
@@ -73,16 +78,26 @@ export async function main() {
       time[index], // time
       flw_type[index],
       speed[index],
+      f_error[index],
     ]);
 
     // Function to convert UTM to latitude and longitude
     function convertUtmToLatLong(
-      utmCoords: [number, number, number, number, number, string, number][]
-    ): [number, number, number, number, number, string, number][] {
+      utmCoords: [
+        number,
+        number,
+        number,
+        number,
+        number,
+        string,
+        number,
+        number
+      ][]
+    ): [number, number, number, number, number, string, number, number][] {
       return utmCoords.map(
-        ([x, y, z, vehicleId, timestamp, flw_type, speed]) => {
+        ([x, y, z, vehicleId, timestamp, flw_type, speed, f_error]) => {
           const [lon, lat] = proj4(utmProj, wgs84Proj, [x, y]);
-          return [lat, lon, z, vehicleId, timestamp, flw_type, speed];
+          return [lat, lon, z, vehicleId, timestamp, flw_type, speed, f_error];
         }
       );
     }

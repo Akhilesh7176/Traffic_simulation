@@ -9,17 +9,15 @@ import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { BokehPass } from "three/examples/jsm/postprocessing/BokehPass.js";
 import { create_roads } from "./roads/create_roads/roads.ts";
 import { changed_utm_coords } from "./roads/road_coordinates/utm_lat_long.ts";
-import { Chart, registerables } from "chart.js";
 import {
   getUniqueItemsById,
   latLonToWebMercator,
   createPauseButton,
   createImageButton,
+  showFError,
 } from "./utils.ts";
 import { createVehicle, VehicleData, animateVehicle } from "./vehicles.ts";
 import { SelectVehicle } from "./dom_elements/create_dialog.ts";
-
-Chart.register(...registerables);
 
 const scene = new THREE.Scene();
 scene.add(new THREE.GridHelper(150));
@@ -88,6 +86,7 @@ const roads = create_roads(refPoint);
 scene.add(roads);
 
 const flatPathData = changed_utm_coords;
+console.log("check in main - ", changed_utm_coords[0][7]);
 const vehicles: VehicleData[] = [];
 const vehicleDataMap = new Map<THREE.Object3D, VehicleData>();
 
@@ -232,19 +231,6 @@ function updateLegend() {
       setTargetButton.addEventListener("click", function () {
         targetVehicleData = vehicleData;
         updateLegend();
-        const vehicleMovementData = targetVehicleData.vehicleMovementData;
-        const dataPoints = vehicleMovementData.map((item) => ({
-          lat: item[0],
-          lon: item[1],
-        }));
-        chart.data.datasets[0].data = dataPoints.map((point) => ({
-          x: point.lon,
-          y: point.lat,
-        }));
-        if (chart.data.datasets.length > 1) {
-          chart.data.datasets[1].data = [];
-        }
-        chart.update();
       });
       legendItem.appendChild(setTargetButton);
       legendItem.appendChild(document.createElement("br"));
@@ -278,100 +264,6 @@ function updateLegend() {
     vehicleData.setTargetButton!.textContent =
       vehicleData === targetVehicleData ? "Target Vehicle" : "Set as Target";
     vehicleData.setTargetButton!.disabled = vehicleData === targetVehicleData;
-  });
-}
-
-const plotContainer = document.createElement("div");
-plotContainer.id = "plot-container";
-plotContainer.style.position = "absolute";
-plotContainer.style.bottom = "10px";
-plotContainer.style.left = "10px";
-plotContainer.style.width = "300px";
-plotContainer.style.height = "300px";
-plotContainer.style.backgroundColor = "#fff";
-plotContainer.style.border = "1px solid #ccc";
-plotContainer.style.padding = "10px";
-plotContainer.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.3)";
-document.body.appendChild(plotContainer);
-
-const plotCanvas = document.createElement("canvas");
-plotCanvas.id = "plot-canvas";
-plotCanvas.width = 280;
-plotCanvas.height = 280;
-plotContainer.appendChild(plotCanvas);
-
-let isDraggingPlot = false;
-let dragStartX = 0;
-let dragStartY = 0;
-let containerStartX = 0;
-let containerStartY = 0;
-
-plotContainer.addEventListener("mousedown", onPlotMouseDown);
-plotContainer.addEventListener("mouseup", onPlotMouseUp);
-plotContainer.addEventListener("mousemove", onPlotMouseMove);
-
-function onPlotMouseDown(event: MouseEvent) {
-  isDraggingPlot = true;
-  dragStartX = event.clientX;
-  dragStartY = event.clientY;
-  const rect = plotContainer.getBoundingClientRect();
-  containerStartX = rect.left;
-  containerStartY = rect.top;
-  plotContainer.style.zIndex = "1000";
-}
-
-function onPlotMouseMove(event: MouseEvent) {
-  if (isDraggingPlot) {
-    const deltaX = event.clientX - dragStartX;
-    const deltaY = event.clientY - dragStartY;
-    plotContainer.style.left = containerStartX + deltaX + "px";
-    plotContainer.style.top = containerStartY + deltaY + "px";
-  }
-}
-
-function onPlotMouseUp() {
-  isDraggingPlot = false;
-  plotContainer.style.zIndex = "10";
-}
-
-let chart: Chart;
-if (targetVehicleData) {
-  const vehicleMovementData = targetVehicleData.vehicleMovementData;
-  const dataPoints = vehicleMovementData.map((item) => ({
-    lat: item[0],
-    lon: item[1],
-  }));
-
-  const ctx = plotCanvas.getContext("2d");
-  chart = new Chart(ctx!, {
-    type: "scatter",
-    data: {
-      datasets: [
-        {
-          label: "Vehicle Path",
-          data: dataPoints.map((point) => ({ x: point.lon, y: point.lat })),
-          borderColor: "blue",
-          backgroundColor: "blue",
-          showLine: true,
-          fill: false,
-          pointRadius: 0,
-        },
-      ],
-    },
-    options: {
-      responsive: false,
-      scales: {
-        x: {
-          type: "linear",
-          position: "bottom",
-          title: { display: true, text: "Longitude" },
-        },
-        y: {
-          type: "linear",
-          title: { display: true, text: "Latitude" },
-        },
-      },
-    },
   });
 }
 
@@ -431,27 +323,13 @@ function animate() {
     targetVehicleData &&
     targetVehicleData.currentLat !== undefined &&
     targetVehicleData.currentLon !== undefined
-  ) {
-    const currentLat = targetVehicleData.currentLat;
-    const currentLon = targetVehicleData.currentLon;
-    if (chart.data.datasets.length > 1) {
-      chart.data.datasets[1].data = [{ x: currentLon, y: currentLat }];
-    } else {
-      chart.data.datasets.push({
-        label: "Current Position",
-        data: [{ x: currentLon, y: currentLat }],
-        borderColor: "red",
-        backgroundColor: "red",
-        pointRadius: 5,
-        showLine: false,
-      });
-    }
-    chart.update();
-  }
-
-  composer.render();
+  )
+    composer.render();
   labelRenderer.render(scene, camera);
 }
 lastTime = Date.now();
+
 SelectVehicle;
+let f_error = "f_error:" + " " + changed_utm_coords[0][7].toFixed(4).toString();
+document.body.appendChild(showFError(f_error));
 animate();
