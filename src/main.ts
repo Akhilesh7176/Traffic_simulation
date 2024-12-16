@@ -249,7 +249,7 @@ function updateLegend() {
     const infoText: any = vehicleData.infoText;
     if (vehicleData.currentPosition) {
       const speed = vehicleData.speed?.toFixed(2);
-      infoText.textContent = `Speed: ${speed} m/s`;
+      infoText.textContent = `Speed: ${speed} km/h`;
     } else {
       infoText.textContent =
         "Status: " +
@@ -301,7 +301,7 @@ function animate() {
           statusText = "Finished";
         }
       } else {
-        statusText = `Speed: ${vehicleData.speed?.toFixed(2)} m/s`;
+        statusText = `Speed: ${vehicleData.speed?.toFixed(2)} km/h`;
       }
       vehicleData.labelElement.textContent = `${vehicleData.tooltip}\n${statusText}`;
     }
